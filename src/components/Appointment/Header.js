@@ -8,4 +8,3 @@ export default function Header(props) {
   </header>
   )
 }
-// 12pm will eventually be {props.time}
