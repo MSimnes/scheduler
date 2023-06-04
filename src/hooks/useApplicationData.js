@@ -8,6 +8,10 @@ function useApplicationData() {
     appointments: {},
     interviewers: {}
   });
+  
+  //state.appointments.id.interview
+
+
 
   const setDay = day => setState(prevState => ({ ...prevState, day }));
 
@@ -30,6 +34,14 @@ function useApplicationData() {
         .then((response) => {
           console.log("response:", response)
           setState(prev => ({ ...prev, appointments }))
+          // update the spots for the day
+          const days = state.days.map((day) => {
+            if (day.name === state.day) {
+              day.spots -= 1;
+            } 
+            return day;
+          })
+          setState(prev => ({ ...prev, days }))
         })
     )
 
@@ -47,8 +59,14 @@ function useApplicationData() {
 
     return axios.delete(`/api/appointments/${id}`, { interview })
         .then((response) => {
-          console.log("response:", response)
           setState(prev => ({ ...prev, appointments }))
+          const days = state.days.map((day) => {
+            if (day.name === state.day) {
+              day.spots += 1;
+            } 
+            return day;
+          })
+          setState(prev => ({ ...prev, days }))
         })
     
   }
