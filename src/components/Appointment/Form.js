@@ -13,6 +13,7 @@ function Form(props) {
   }
   const cancel = () => {
     reset()
+    setError("")
     props.onCancel()
   }
 
@@ -40,6 +41,7 @@ function Form(props) {
             value={student}
             onChange={(event)=> setStudent(event.target.value)}
             onSubmit={(event)=> event.preventDefault()}
+            data-testid="student-name-input"
           />
           {error && <h5>{error}</h5>}
         </form>
