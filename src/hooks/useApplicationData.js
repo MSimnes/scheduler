@@ -14,6 +14,18 @@ function useApplicationData() {
 
 
   const setDay = day => setState(prevState => ({ ...prevState, day }));
+  const spotsRemaining = (appointments) => {
+    const currentDay = state.days.find((day) => state.day === day.name);
+    let daySpots = 0 ;
+    currentDay.appointments.forEach(appointmentId => {
+      if (!appointments[appointmentId].interview) {
+        daySpots++
+        
+      }
+    })
+    const updateDay = {...currentDay, spots: daySpots}
+    return state.days.map((day) => state.day === day.name ? updateDay : day)
+  }
 
   function bookInterview(id, interview) {
     const appointment = {
@@ -24,24 +36,12 @@ function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    setState({ ...state, appointments });
-    //make the request to the correct endpoint with id and interview object
-    //upon response update the state with setState and the new appointments object
-    //spread the previous state and add the new appointments object
-    //transition to the SHOW mode
+
     return (
       axios.put(`/api/appointments/${id}`, { interview })
-        .then((response) => {
-          console.log("response:", response)
-          setState(prev => ({ ...prev, appointments }))
-          // update the spots for the day
-          const days = state.days.map((day) => {
-            if (day.name === state.day) {
-              day.spots -= 1;
-            } 
-            return day;
-          })
-          setState(prev => ({ ...prev, days }))
+      .then((response) => {
+        console.log("response:", response)
+        setState(prev => ({ ...prev, appointments, days: spotsRemaining(appointments) }))
         })
     )
 
