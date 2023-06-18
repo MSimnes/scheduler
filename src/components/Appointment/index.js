@@ -1,6 +1,8 @@
 import React from "react";
 import "./styles.scss";
 
+// this is a custom hook that is responsible for managing the visual modes of the Appointment component
+
 import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
@@ -21,8 +23,7 @@ const ERROR_SAVE = "ERROR_SAVE";
 const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
-  // creates an interview object
-  //passes the interview object to props.bookInterview
+  // saves the name and interviewer to props.bookInterview
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -35,8 +36,7 @@ export default function Appointment(props) {
       .then(() => transition(SHOW))
       .catch((error) => transition(ERROR_SAVE, true));
   }
-  // passes the appointment id to props.cancelInterview
-  // transitions to the EMPTY mode
+  // cancels the interview and transitions to the empty mode
   function cancel(event) {
     transition(DELETE, true);
     props
